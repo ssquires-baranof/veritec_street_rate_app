@@ -29,12 +29,13 @@ py_install("playwright", envname = "vtsr_app_env")
 py_install("boto3", envname = "vtsr_app_env")
 py_install("tenacity", envname = "vtsr_app_env")
 use_virtualenv("vtsr_app_env")
-#system("playwright install")
-
-
+source_python("veritec_street_rate.py")
 dl <- import("deltalake")
 
-source_python("veritec_street_rate.py")
+py_run_string("import playwright.install
+playwright.install.main()")
+
+
 
 user_tbl <- tibble(
   user_name = c("u", "andrew", "shane", "allison", "eric", "hank", "blake", "lauren"),

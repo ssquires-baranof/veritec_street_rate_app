@@ -7,8 +7,8 @@ import datetime
 from tenacity import retry, stop_after_attempt
 
 
-lambda_client = boto3.client('lambda')
-scheduler_client = boto3.client('scheduler')
+lambda_client = boto3.client('lambda', region_name='us-east-1')
+scheduler_client = boto3.client('scheduler', region_name='us-east-1')
 lambda_function_arn = 'arn:aws:lambda:us-east-1:247376099496:function:veritec_email'
 
 rule_name = "veritec-email-rule"
