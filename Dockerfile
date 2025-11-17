@@ -40,7 +40,7 @@ RUN install2.r --error --skipinstalled --ncpus -1 \
     && rm -rf /tmp/downloaded_packages \
     && rm -rf /var/lib/apt/lists/*
 
-COPY ecri_app /home
+COPY vtsr_app /home
 
 WORKDIR /home
 
@@ -62,9 +62,6 @@ EXPOSE 8777
 
 #CMD Rscript /srv/shiny-server/reticulate_setup.R
 
-RUN pip install playwright asyncio boto3
-RUN playwright install
-RUN playwright install-deps
 
 COPY vtsr_app /srv/shiny-server/
   
