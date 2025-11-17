@@ -1,0 +1,62 @@
+Store #,Store ,Address,Latitude,Longitude,3/25/25,6/5/25
+,1,"7855 Haskell Ave, Van Nuys, CA",34.2135548,-118.4758223,x,x
+,2,"943 W Hyde Park Blvd, Inglewood, CA",33.9660155,-118.3690083,x,x
+,3,"6206 W Alameda Ave, Denver, CO",39.7105444,-105.0649856,x,x
+,4,"1050 Brittmoore Rd, Houston, TX",29.786925,-95.569388,x,x
+,5,"4001 Old Spanish Trail, Houston, TX",29.7029319,-95.3552157,x,x
+,6,"4308 Williams Blvd, Kenner, LA",30.0351744,-90.2373566,x,x
+,7,"2705 Severn Ave, New Orleans, LA",30.000603,-90.15935,x,x
+,8,"2321 Perdido St, New Orleans, LA",29.9580342,-90.0883298,x,x
+,9,"2712 Ski Ln, Madison, WI",43.0327717,-89.3882404,x,x
+,10,"3415 Bardstown Rd, Louisville, KY",38.2051959,-85.6656989,x,x
+,11,"2801 N Hurstbourne Pkwy, Louisville, KY",38.2857256,-85.5696762,x,x
+,12,"3099 Loring Rd, Kennesaw, GA",34.0309127,-84.6621899,x,x
+,13,"4676 S Atlanta Rd, Smyrna, GA",33.8392319,-84.4850437,x,x
+,14,"1484 Northside Dr NW, Atlanta, GA",33.795507,-84.4088317,x,x
+,15,"430 Bishop St NW, Atlanta, GA",33.7929829,-84.4016948,x,x
+,16,"56 Peachtree Valley Rd NW, Atlanta, GA",33.8110659,-84.3914579,x,x
+,17,"2033 Monroe Dr, Atlanta, GA",33.8093123,-84.3740477,x,x
+,18,"1115 Hope Rd, Sandy Springs, GA",33.9885155,-84.3491727,x,x
+,19,"130 Jack Dance St, Knoxville, TN",35.9275693,-84.0436506,x,x
+,20,"16100 Fort St, Southgate, MI",42.1914638,-83.1814794,x,x
+,21,"9125 Ulmerton Rd, Largo, FL",27.8951509,-82.7655572,x,x
+,22,"3201 32nd Ave S, St. Petersburg, FL",27.7396745,-82.6770893,x,x
+x,23,"2460 S Falkenburg Rd, Tampa, FL",27.9259848,-82.3368519,x,x
+,24,"2710 Skyline Blvd, Cape Coral, FL",26.601818,-81.991461,x,x
+,25,"2004 Edison Ave, Jacksonville, FL",30.3225549,-81.6830793,x,x
+,26,"45 Jefferson Rd, Jacksonville, FL",30.325429,-81.5262566,x,x
+,27,"7360 W Sand Lake Rd, Orlando, FL",28.449846,-81.4807681,x,x
+,28,"1980 Mentor Ave, Painesville, OH",41.690911,-81.288172,x,x
+,29,"10959 Lake Underhill Rd, Orlando, FL",28.542436,-81.227108,x,x
+,30,"12709 E Colonial Dr, Orlando, FL",28.5659699,-81.1894582,x,x
+,31,"1010 E 10th St, Charlotte, NC",35.2240318,-80.8275284,x,x
+,32,"9323 Wright Hill Rd, Charlotte, NC",35.3293852,-80.7427674,x,x
+,33,"18900 Pines Blvd, Pembroke Pines, FL",26.0056,-80.4019859,x,x
+,34,"18460 Pines Blvd, Pembroke Pines, FL",26.0058469,-80.394161,x,x
+,35,"3951 NW 77th, Doral, FL",25.8106457,-80.3190399,x,x
+,36,"4250 SW 8th St, Miami, FL",25.7642469,-80.2645118,x,x
+,37,"212 NE 26th St, Miami, FL",25.8014416,-80.1906849,x,x
+,38,"5219 Aquarius Blvd, Lake Worth, FL",26.5921274,-80.188717,x,x
+,39,"5601 NE 14th Ave, Fort Lauderdale, FL",26.1969476,-80.1318376,x,x
+,40,"6400 Hamilton Ave, Pittsburgh, PA",40.4595164,-79.9156522,x,x
+,41,"902 Brinton Rd, Pittsburgh, PA",40.4349428,-79.872548,same,same
+,42,"1515 Sunrise Ave, Raleigh, NC",35.802279,-78.6362692,x,x
+,43,"2795 Jefferson Davis Pkwy., Stafford, VA",38.4584629,-77.4072138,x,x
+,44,"5765 General Washington Dr, Alexandria, VA",38.7936445,-77.168999,x,x
+,45,"1308 Dorsey Rd, Hanover, MD",39.1589944,-76.7069301,x,x
+,46,"1835 Washington Blvd, Baltimore, MD",39.2741556,-76.642838,x,x
+,47,"265 8th Ave NW, Glen Burnie, MD",39.171446,-76.628557,x,x
+,48,"4501 Fitch Ave, Nottingham, MD",39.3687529,-76.5034042,x,x
+,49,"227 Chapman Rd, Newark, DE",39.6671842,-75.6760735,x,x
+,50,"100 Lee Dr, Plymouth, PA",40.1070743,-75.2933027,x,x
+,51,"1505 Chester Pk, Folcroft, PA",39.9040229,-75.2806128,x,x
+,52,"6 Commerce Center , Dover, NJ",40.899215,-74.556644,x,x
+,53,"2160 W County Line Rd, Jackson, NJ",40.124269,-74.2645438,x,x
+,54,"435 Tompkins Ave, Staten Island, NY",40.6148805,-74.0729032,x,x
+,55,"374 S River St, Hackensack, NJ",40.8658231,-74.036634,x,x
+,56,"465 W 150th St, New York, NY",40.8282451,-73.9443861,x,x
+,57,"1401 4th Ave, New Hyde Park, NY",40.7304439,-73.6802717,x,x
+,58,"1775 5th Ave, Bayshore, NY",40.7690997,-73.2597777,x,x
+,59,"453 Washington Ave, North Haven, CT",41.4127876,-72.8424228,x,x
+,60,"1765 Plainfield Pk, Johnston, RI",41.7920155,-71.5016084,x,x
+,61,"10 Hampshire Rd, Salem, NH",42.7423055,-71.2012108,x,x
