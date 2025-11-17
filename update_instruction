@@ -1,5 +1,5 @@
-sudo ssh -i ~/.ssh/baws/ec2/baranof_aws.pem ubuntu@ec2-34-228-82-153.compute-1.amazonaws.com
-cd vtsr_app
+sudo ssh -i ~/.ssh/baws/ec2/baranof_aws.pem ubuntu@ec2-54-175-64-101.compute-1.amazonaws.com
+cd veritec_street_rate_app
 git pull
 
 sudo docker container stop vtsr_app
@@ -9,4 +9,4 @@ sudo docker system prune --all --volumes
 sudo docker build -t vtsr_app .
 sudo docker run -p 80:8777 --name vtsr_app vtsr_app:latest
 
-http://ec2-34-228-82-153.compute-1.amazonaws.com/
+http://ec2-54-175-64-101.compute-1.amazonaws.com/

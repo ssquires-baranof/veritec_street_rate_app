@@ -32,8 +32,7 @@ use_virtualenv("vtsr_app_env")
 source_python("veritec_street_rate.py")
 dl <- import("deltalake")
 
-py_run_string("import playwright.install
-playwright.install.main()")
+system("playwright install")
 
 
 
