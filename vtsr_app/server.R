@@ -29,9 +29,7 @@ py_install("playwright", envname = "vtsr_app_env")
 py_install("boto3", envname = "vtsr_app_env")
 py_install("tenacity", envname = "vtsr_app_env")
 use_virtualenv("vtsr_app_env")
-system("playwright install")
-
-
+#system("playwright install")
 
 
 dl <- import("deltalake")
