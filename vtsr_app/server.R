@@ -150,7 +150,6 @@ function(input, output, session) {
       req(rv$store_list)
       req(input$radius)
       removeModal()
-      page = get_veritec_page_runner()
       #rv$lat <- as.character(rv$store_list[i, "Latitude"])
       #rv$lon <- as.character(rv$store_list[i, "Longitude"])
       rv$exclude <- as.list(input$exclude_list)
