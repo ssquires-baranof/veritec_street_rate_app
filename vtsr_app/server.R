@@ -11,6 +11,7 @@ library(shiny)
 library(duckdb)
 library(reticulate)
 library(sodium)
+library(tibble)
 con <- dbConnect(duckdb())
 dbGetQuery(con, 'INSTALL delta; LOAD delta; INSTALL aws;INSTALL httpfs;')
 
@@ -49,6 +50,40 @@ user_tbl <- tibble(
 # Define server logic required to draw a histogram
 function(input, output, session) {
   
+  logout_init <- shinyauthr::logoutServer(
+    id = "logout",
+    active = reactive(credentials()$user_auth)
+  )
+  
+  credentials <- shinyauthr::loginServer(
+    id = "login",
+    data = user_tbl,
+    user_col = user_name,
+    pwd_col = password,
+    sodium_hashed = TRUE,
+    log_out =  reactive(logout_init())
+    
+  )
+  
+  
+  #### FULL APP WRAPPED IN THIS  
+  observeEvent(
+    credentials()$user_auth, {
+      
+      req(credentials()$user_auth)
+      showNotification(paste("Hi! ", credentials()$info$user_name, "! You Are Logged In."), duration = 5)
+      
+    })
+  
+  
+  #### FULL APP WRAPPED IN THIS  ^^^
+  observeEvent(logout_init(), {
+    showNotification(paste("Bye! You Are Now Logging Out."), duration = 5)
+    Sys.sleep(1.5)
+    session$reload()
+    
+  })
+  
   rv <- reactiveValues(
     
     store_list = NULL,
@@ -63,7 +98,9 @@ function(input, output, session) {
 
 
   observeEvent(
-    input$store_list_upload
+    list(input$store_list_upload,
+         credentials()$user_auth)
+    
     ,{
     if (!is.null(input$store_list_upload)) {
       # Process the uploaded file, e.g., read it
