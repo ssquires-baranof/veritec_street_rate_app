@@ -28,10 +28,10 @@ py_install("asyncio", envname = "vtsr_app_env")
 py_install("playwright", envname = "vtsr_app_env")
 py_install("boto3", envname = "vtsr_app_env")
 py_install("tenacity", envname = "vtsr_app_env")
-
+use_virtualenv("vtsr_app_env")
 system("playwright install")
 
-use_virtualenv("vtsr_app_env")
+
 
 
 dl <- import("deltalake")
