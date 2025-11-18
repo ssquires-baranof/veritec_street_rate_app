@@ -148,8 +148,9 @@ async def click_all_checkboxes_in_table_rows(page, exclude_list):
 @retry(stop=stop_after_attempt(3))
 async def veritec_login(pw) -> Page:
   try:
-    browser = await pw.chromium.launch(headless=True, downloads_path="./downloads")
-    context = await browser.new_context(accept_downloads=True)
+    browser = await pw.chromium.launch(headless=True, downloads_path=".")
+    context = await browser.new_context(accept_downloads=True, 
+      user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36")
     page = await context.new_page()
   
     url = 'https://rmsprod2.veritecrms.com/#/'
@@ -202,7 +203,6 @@ async def veritec_login(pw) -> Page:
 
 
 # %%
-
 async def get_veritec_street_rate(store_list, exclude_list, coords, radius, start_date):
     async with async_playwright() as pw:
         
@@ -212,63 +212,77 @@ async def get_veritec_street_rate(store_list, exclude_list, coords, radius, star
         
         status = login_output[1]
         
-        for row_tuple in coords.itertuples():
-            print(f"Index: {row_tuple.Index}, Latitude: {row_tuple.Latitude}, Longitude: {row_tuple.Longitude}")
-            latitude = str(row_tuple.Latitude)
-            longitude = str(row_tuple.Longitude)
-            await expect(page.get_by_role("spinbutton").first).to_be_visible()
-            await page.get_by_role("spinbutton").first.click()
-            await page.wait_for_load_state("networkidle")
-            time.sleep(1)
-            await page.get_by_role("spinbutton").first.fill(latitude)
-
-            await expect(page.get_by_role("spinbutton").nth(1)).to_be_visible()
-            await page.get_by_role("spinbutton").nth(1).click()
-            await expect(page.get_by_role("spinbutton").first).to_be_visible()
-            await page.get_by_role("spinbutton").nth(1).fill(longitude)
-
-            await page.wait_for_load_state("networkidle")
-            await page.locator("input[type='number']").first.fill(radius)
-
-            await page.wait_for_load_state("networkidle")
-            time.sleep(1)
-            await expect(page.locator("#daysDataDropDown")).to_be_visible()
-            await page.locator("#daysDataDropDown").select_option(value="5")
-
-            await page.wait_for_load_state("networkidle")
-            time.sleep(1)
-            
-            await click_checkboxes_in_table_rows(page, store_list, exclude_list)
-
-            await page.get_by_title("Request Hist Comps").click()
-
-            # await expect(page.get_by_role('listbox')).to_be_visible()
-            time.sleep(1)
-
-            await page.get_by_role('listbox').click()
-
-            await page.locator("#frequency").evaluate("el => el.style.display = 'block'")
-
-            await page.locator("#frequency").select_option(value="Daily")
-
-            await page.get_by_role('listbox').first.click()
-
-            await page.locator('input[data-role="datepicker"]').fill(start_date)
-
-            await page.get_by_role("button", name="Save").click()
-
-            await page.get_by_role("button", name="Ok").click()
-
-            time.sleep(1)
-            
-        await page.close()
-
-        await schedule_veritec_email_read(10)
-        
-        return status
+        try:
+          for row_tuple in coords.itertuples():
+              print(f"Index: {row_tuple.Index}, Latitude: {row_tuple.Latitude}, Longitude: {row_tuple.Longitude}")
+              latitude = str(row_tuple.Latitude)
+              longitude = str(row_tuple.Longitude)
+              await expect(page.get_by_role("spinbutton").first).to_be_visible()
+              await page.get_by_role("spinbutton").first.click()
+              await page.wait_for_load_state("networkidle")
+              time.sleep(1)
+              await page.get_by_role("spinbutton").first.wait_for(state="visible", timeout=10000)
+              await page.get_by_role("spinbutton").first.fill(latitude)
+  
+              await expect(page.get_by_role("spinbutton").nth(1)).to_be_visible()
+              await page.get_by_role("spinbutton").nth(1).click()
+              time.sleep(1)
+              await page.get_by_role("spinbutton").nth(1).wait_for(state="visible", timeout=10000)
+              await page.get_by_role("spinbutton").nth(1).fill(longitude)
+  
+              await page.wait_for_load_state("networkidle")
+              time.sleep(1)
+              await page.screenshot(path = "test.png")
+              #await page.locator("input[type='number']").wait_for(state="visible", timeout=30000)
+              #await page.locator("input[type='number']").wait_for(state="enabled", timeout=30000)
+              await page.locator("input[type='number']").first.fill(radius, force = True)
+  
+              await page.wait_for_load_state("networkidle")
+              time.sleep(1)
+              await expect(page.locator("#daysDataDropDown")).to_be_visible()
+              await page.locator("#daysDataDropDown").select_option(value="5")
+  
+              await page.wait_for_load_state("networkidle")
+              time.sleep(1)
+              
+              await click_checkboxes_in_table_rows(page, store_list, exclude_list)
+  
+              await page.get_by_title("Request Hist Comps").click()
+  
+              # await expect(page.get_by_role('listbox')).to_be_visible()
+              time.sleep(1)
+              await page.get_by_role('listbox').wait_for(state="visible", timeout=10000)
+  
+              await page.get_by_role('listbox').click()
+  
+              await page.locator("#frequency").evaluate("el => el.style.display = 'block'")
+  
+              await page.locator("#frequency").select_option(value="Daily")
+  
+              await page.get_by_role('listbox').first.click()
+  
+              await page.locator('input[data-role="datepicker"]').fill(start_date)
+  
+              await page.get_by_role("button", name="Save").click()
+  
+              await page.get_by_role("button", name="Ok").click()
+  
+              time.sleep(1)
+              
+          await page.close()
+  
+          await schedule_veritec_email_read(10)
+          
+          status_read = "Successfully Scheduled Email Read!"
+  
+        except playwright.sync_api.Error as e:
+          print(e)
+    
+          status_read = "Failed to Schedule Email Read"
+  
+        return [status, status_read]
 
 #%%
-
 async def get_all_veritec_street_rate(exclude_list, coords, radius, start_date):
     async with async_playwright() as pw:
         
@@ -278,67 +292,87 @@ async def get_all_veritec_street_rate(exclude_list, coords, radius, start_date):
         
         status = login_output[1]
         
-        for row_tuple in coords.itertuples():
-            print(f"Index: {row_tuple.Index}, Latitude: {row_tuple.Latitude}, Longitude: {row_tuple.Longitude}")
-            latitude = str(row_tuple.Latitude)
-            longitude = str(row_tuple.Longitude)
-            await expect(page.get_by_role("spinbutton").first).to_be_visible()
-            await page.get_by_role("spinbutton").first.click()
-            await page.wait_for_load_state("networkidle")
-            time.sleep(1)
-            await page.get_by_role("spinbutton").first.fill(latitude)
-
-            await expect(page.get_by_role("spinbutton").nth(1)).to_be_visible()
-            await page.get_by_role("spinbutton").nth(1).click()
-            await expect(page.get_by_role("spinbutton").first).to_be_visible()
-            await page.get_by_role("spinbutton").nth(1).fill(longitude)
-
-            await page.wait_for_load_state("networkidle")
-            await page.locator("input[type='number']").first.fill(radius)
-
-            await page.wait_for_load_state("networkidle")
-            time.sleep(1)
-            await expect(page.locator("#daysDataDropDown")).to_be_visible()
-            await page.locator("#daysDataDropDown").select_option(value="5")
-
-            await page.wait_for_load_state("networkidle")
-            time.sleep(1)
-            
-            await click_all_checkboxes_in_table_rows(page, exclude_list)
-
-            await page.get_by_title("Request Hist Comps").click()
-
-            # await expect(page.get_by_role('listbox')).to_be_visible()
-            time.sleep(1)
-
-            await page.get_by_role('listbox').click()
-
-            await page.locator("#frequency").evaluate("el => el.style.display = 'block'")
-
-            await page.locator("#frequency").select_option(value="Daily")
-
-            await page.get_by_role('listbox').first.click()
-
-            await page.locator('input[data-role="datepicker"]').fill(start_date)
-
-            await page.get_by_role("button", name="Save").click()
-
-            await page.get_by_role("button", name="Ok").click()
-
-            time.sleep(1)
-            
-        await page.close()
-
-        await schedule_veritec_email_read(10)
+        try:
         
-        return status
+          for row_tuple in coords.itertuples():
+              print(f"Index: {row_tuple.Index}, Latitude: {row_tuple.Latitude}, Longitude: {row_tuple.Longitude}")
+              latitude = str(row_tuple.Latitude)
+              longitude = str(row_tuple.Longitude)
+              await expect(page.get_by_role("spinbutton").first).to_be_visible()
+              await page.get_by_role("spinbutton").first.click()
+              await page.wait_for_load_state("networkidle")
+              time.sleep(1)
+              await page.get_by_role("spinbutton").first.wait_for(state="visible", timeout=10000)
+              await page.get_by_role("spinbutton").first.fill(latitude)
+  
+              await expect(page.get_by_role("spinbutton").nth(1)).to_be_visible()
+              await page.get_by_role("spinbutton").nth(1).click()
+              time.sleep(1)
+              await page.get_by_role("spinbutton").nth(1).wait_for(state="visible", timeout=10000)
+              await page.get_by_role("spinbutton").nth(1).fill(longitude)
+  
+              await page.wait_for_load_state("networkidle")
+              time.sleep(1)
+              #await page.locator("input[type='number']").wait_for(state="attached", timeout=30000)
+              #await page.locator("input[type='number']").wait_for(state="visible", timeout=30000)
+              #await page.locator("input[type='number']").wait_for(state="enabled", timeout=30000)
+              await page.screenshot(path = "test.png")
+              await page.locator("input[type='number']").first.fill(radius, force = True, timeout = 60000)
+  
+              await page.wait_for_load_state("networkidle")
+              time.sleep(1)
+              await expect(page.locator("#daysDataDropDown")).to_be_visible()
+              await page.locator("#daysDataDropDown").select_option(value="5")
+  
+              await page.wait_for_load_state("networkidle")
+              time.sleep(1)
+              
+              await click_all_checkboxes_in_table_rows(page, exclude_list)
+  
+              await page.get_by_title("Request Hist Comps").click()
+  
+              # await expect(page.get_by_role('listbox')).to_be_visible()
+              time.sleep(1)
+              
+              await page.get_by_role('listbox').wait_for(state="visible", timeout=30000)
+  
+              await page.get_by_role('listbox').click()
+  
+              await page.locator("#frequency").evaluate("el => el.style.display = 'block'")
+  
+              await page.locator("#frequency").select_option(value="Daily")
+  
+              await page.get_by_role('listbox').first.click()
+  
+              await page.locator('input[data-role="datepicker"]').fill(start_date)
+  
+              await page.get_by_role("button", name="Save").click()
+  
+              await page.get_by_role("button", name="Ok").click()
+  
+              time.sleep(1)
+              
+          await page.close()
+  
+          await schedule_veritec_email_read(10)
+          
+          status_read = "Successfully Scheduled Email Read!"
+          
+        except playwright.sync_api.Error as e:
+          print(e)
+    
+          status_read = "Failed to Schedule Email Read"
+  
+        return [status, status_read]
 
 #%%
 
 def veritec_street_rate_runner(store_list, exclude_list, coords, radius, start_date):
-    asyncio.run(get_veritec_street_rate(store_list, exclude_list, coords, radius, start_date))
+    status = asyncio.run(get_veritec_street_rate(store_list, exclude_list, coords, radius, start_date))
+    return statuses
     
 #%%
 
 def veritec_all_street_rate_runner(exclude_list, coords, radius, start_date):
-    asyncio.run(get_all_veritec_street_rate(exclude_list, coords, radius, start_date))
+    statuses = asyncio.run(get_all_veritec_street_rate(exclude_list, coords, radius, start_date))
+    return statuses

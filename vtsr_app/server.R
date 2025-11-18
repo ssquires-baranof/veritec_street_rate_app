@@ -92,7 +92,8 @@ function(input, output, session) {
     start_date = NULL,
     lat = NULL,
     lon = NULL,
-    rad = NULL
+    rad = NULL,
+    statuses = NULL
     
   )
 
@@ -160,13 +161,17 @@ function(input, output, session) {
       rv$rad <- as.character(input$radius)
       
       if(length(rv$include) == 0){
-        veritec_all_street_rate_runner(rv$exclude, rv$store_list, rv$rad, rv$start_date)
+        rv$statuses <- veritec_all_street_rate_runner(rv$exclude, rv$store_list, rv$rad, rv$start_date)
       } else {
-        veritec_street_rate_runner(rv$include, rv$exclude, rv$store_list, rv$rad, rv$start_date)
+        rv$statuses <- veritec_street_rate_runner(rv$include, rv$exclude, rv$store_list, rv$rad, rv$start_date)
       }
         
     }
   )
+  
+  observeEvent(rv$statuses, {
+    showNotification(paste0(rv$statuses[1], " ", rv$statuses[2]), type = "message", duration = 5)
+  })
   
   
 
