@@ -34,6 +34,7 @@ source_python("veritec_street_rate.py")
 dl <- import("deltalake")
 
 system("playwright install")
+system("playwright install-deps")
 
 
 
@@ -161,9 +162,26 @@ function(input, output, session) {
       rv$rad <- as.character(input$radius)
       
       if(length(rv$include) == 0){
-        rv$statuses <- veritec_all_street_rate_runner(rv$exclude, rv$store_list, rv$rad, rv$start_date)
+        rv$statuses <- tryCatch( {
+          veritec_all_street_rate_runner(rv$exclude, rv$store_list, rv$rad, rv$start_date)
+        }, 
+        error = function(e) {
+          message("An error occurred: ", e$message)
+          message("An error occurred: ", reticulate::py_last_error())
+          
+        }
+          )
+        
       } else {
-        rv$statuses <- veritec_street_rate_runner(rv$include, rv$exclude, rv$store_list, rv$rad, rv$start_date)
+        rv$statuses <- tryCatch({
+          veritec_street_rate_runner(rv$include, rv$exclude, rv$store_list, rv$rad, rv$start_date)
+        }, 
+        error = function(e) {
+          message("An error occurred: ", e$message)
+          message("An error occurred: ", reticulate::py_last_error())
+          
+        }
+        )
       }
         
     }
