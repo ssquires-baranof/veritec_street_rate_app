@@ -62,6 +62,8 @@ get_request_status <- function() {
 
 svc <- paws.application.integration::sqs()
 
+queue_url <- "https://sqs.us-east-1.amazonaws.com/247376099496/baranof-street-rate.fifo"
+
 sqs_process <- function() {
   
   response <- svc$receive_message(
