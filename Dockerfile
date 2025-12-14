@@ -16,6 +16,7 @@ RUN install2.r --error --skipinstalled --ncpus -1 \
     leaflet \
     leafem \
     lubridate \
+    paws.storage \
     purrr \
     raster \
     RAthena \
