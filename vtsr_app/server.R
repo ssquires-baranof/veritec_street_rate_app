@@ -12,7 +12,9 @@ library(duckdb)
 library(reticulate)
 library(sodium)
 library(tibble)
-library(paws.storage)
+library(paws.application.integration)
+library(clock)
+
 con <- dbConnect(duckdb())
 dbGetQuery(con, 'INSTALL delta; LOAD delta; INSTALL aws;INSTALL httpfs;')
 
@@ -57,6 +59,8 @@ get_request_status <- function() {
   
   return(df)
 }
+
+svc <- paws.application.integration::sqs()
 
 sqs_process <- function() {
   

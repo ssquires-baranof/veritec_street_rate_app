@@ -4,6 +4,7 @@ RUN apt-get update
 
 RUN install2.r --error --skipinstalled --ncpus -1 \
     bs4Dash \
+    clock \
     devtools \
     dplyr \
     DT \
@@ -16,7 +17,7 @@ RUN install2.r --error --skipinstalled --ncpus -1 \
     leaflet \
     leafem \
     lubridate \
-    paws.storage \
+    paws.application.integration \
     purrr \
     raster \
     RAthena \
