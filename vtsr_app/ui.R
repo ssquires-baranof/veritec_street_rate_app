@@ -111,6 +111,21 @@ shinyUI(dashboardPage(
       max = 50 
     ),
     dateInput("start_date", "Start Date:", value = Sys.Date()-months(1)),
+    numericInput( 
+      "chunk_size", 
+      "Chunk Size (Number of Stores per Email)", 
+      value = 5, 
+      min = 1, 
+      max = 1000 
+    ),
+    selectInput(
+      "frequency",
+      "Frequency",
+      c("Daily", "Weekly", "Monthly"),
+      selected = "Monthly",
+      multiple = FALSE
+      
+    ),
     actionButton(inputId = "comp_request", label = "Submit Comp Request")
   ),
   body = dashboardBody(
@@ -156,7 +171,9 @@ shinyUI(dashboardPage(
                    width = 12, collapsible = FALSE,
                    maximizable=FALSE,
                    background = "primary",
-                   tabPanel(title = "Request Queue"),
+                   tabPanel(title = "Request Queue",
+                            actionButton(inputId = "get_requests", label = "Refresh"),
+                            DTOutput("requests")),
                    tabPanel(title = "Completed Requests")
                    #tabPanel(
                    # title = "Sales Chart"
