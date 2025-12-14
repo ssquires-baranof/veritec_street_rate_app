@@ -52,8 +52,9 @@ async def schedule_veritec_email_read(delay, workflow):
         },
         Target={
             'Arn': lambda_function_arn,
-            'RoleArn': 'arn:aws:iam::247376099496:role/eventbridge_lambda_scheduler'},
+            'RoleArn': 'arn:aws:iam::247376099496:role/eventbridge_lambda_scheduler',
             'Input': input_payload,
+            },
 
     )
 
