@@ -220,7 +220,7 @@ async def unclick_checkboxes_in_table_rows(page, store_list, exclude_list):
 @retry(stop=stop_after_attempt(3))
 async def veritec_login(pw) -> Page:
     try:
-        browser = await pw.chromium.launch(headless=False, downloads_path=".")
+        browser = await pw.chromium.launch(headless=True, downloads_path=".")
         context = await browser.new_context(accept_downloads=True,
                                             user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36")
         page = await context.new_page()

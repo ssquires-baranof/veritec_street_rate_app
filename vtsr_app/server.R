@@ -12,7 +12,6 @@ library(duckdb)
 library(reticulate)
 library(sodium)
 library(tibble)
-library(paws.application.integration)
 library(clock)
 
 con <- dbConnect(duckdb())
@@ -60,53 +59,8 @@ get_request_status <- function() {
   return(df)
 }
 
-svc <- paws.application.integration::sqs()
 
-queue_url <- "https://sqs.us-east-1.amazonaws.com/247376099496/baranof-street-rate.fifo"
 
-sqs_process <- function() {
-  
-  response <- svc$receive_message(
-    QueueUrl = queue_url,
-    MaxNumberOfMessages = 10, # Fetch one message at a time
-    WaitTimeSeconds = 10 # Use long polling for up to 10 seconds
-  )
-  
-  sqs_count <- length(response$Messages)
-  
-  
-  
-  if (!is.null(response$Messages) && sqs_count > 0) {
-    
-    most_recent_sqs <- response$Messages[[sqs_count]]
-    message_body <- most_recent_sqs$Body
-    receipt_handle <- most_recent_sqs$ReceiptHandle
-    time <- jsonlite::fromJSON(message_body)$time
-    
-    print(paste("Received message:", message_body))
-    
-    # Optionally, delete the message from the queue after processing
-    svc$delete_message(
-      QueueUrl = queue_url,
-      ReceiptHandle = receipt_handle
-    )
-    print("Message deleted from queue.")
-    
-    time_sqs <- fromJSON(message_body)$time
-    
-    current_time <- date_now("UTC")
-    
-    sqs_time_diff <- as.numeric(difftime(ymd_hms(current_time),ymd_hms(time_sqs), units = "hours"))
-    
-    runnit <- if(sqs_time_diff<=.5) {TRUE} else {FALSE}
-    
-    return(runnit)
-    
-  } else {
-    print("No messages received.")
-    return(FALSE)
-  }
-}
 
 # Define server logic required to draw a histogram
 function(input, output, session) {
@@ -265,51 +219,7 @@ function(input, output, session) {
                })
   
   
-  ###
-  ###. BARANOF AUTO RUN
-  ###
-  ## every ten minutes
-  poll_interval <- 600000
-  
-  observe({
-    invalidateLater(poll_interval, session)
-    
-    rv$runnit <- sqs_process()
-    
-    if(rv$runnit == T) {
-      
-      current_date = ymd(now(tz = 'UTC') |> as_date())
-      
-      
-      last_upload_date <- as_date(dbGetQuery(con, 
-                                              "SELECT upload_date FROM 
-                                        delta_scan('s3://baranof-veritec/baranof-street-rate/bronze/history_day')
-                                        order by upload_date desc limit 1")$upload_date)
-      
-      days_since_upload <- as.numeric(current_date - last_upload_date, units = 'days')
-      
-      baranof_store_list <-  dbGetQuery(con, "SELECT latitude Latitude, longitude Longitude FROM 
-                                        delta_scan('s3://baranof-landing/gold/assets')") 
-      
-      if(days_since_upload > 0) {
-        rv$statuses <- tryCatch({
-          veritec_street_rate_runner(baranof_store_list, list("Sparefoot"), list(), "5", 
-                                     last_upload_date, 10000, "Daily", 
-                                     "baranof")
-        }, 
-        error = function(e) {
-          message("An error occurred: ", e$message)
-          message("An error occurred: ", reticulate::py_last_error())
-          
-        }
-        )
-        
-      }
-      
-    }
-    
-    
-  })
+
   
   
 
